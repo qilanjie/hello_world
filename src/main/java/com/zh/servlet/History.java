@@ -1,13 +1,16 @@
 package com.zh.servlet;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,14 +20,30 @@ public class History extends HttpServlet {
     private static final long serialVersionUID = 1L;
     // JDBC 驱动名及数据库 URL
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost:3306/sdzh?serverTimezone=UTC";
+    static final String DB_URL = "jdbc:mysql://192.168.123.107:3306/sdzh?serverTimezone=UTC";
 
     // 数据库的用户名与密码，需要根据自己的设置
-    static final String USER = "root";
+    static final String USER = "sdzh";
     static final String PASS = "qwh";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            BufferedReader streamReader = new BufferedReader( new InputStreamReader(req.getInputStream(), "UTF-8"));
+            StringBuilder responseStrBuilder = new StringBuilder();
+            String inputStr;
+            while ((inputStr = streamReader.readLine()) != null)
+                responseStrBuilder.append(inputStr);
+
+            JSONObject jsonObject = JSONObject.parseObject(responseStrBuilder.toString());
+//            user= jsonObject.getString("user");
+//            password=jsonObject.getString("password");
+//            saveDate=jsonObject.getString("datetime");
+            System.out.println(responseStrBuilder.toString());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Connection conn = null;
         Statement stmt = null;
         resp.setCharacterEncoding("utf-8");

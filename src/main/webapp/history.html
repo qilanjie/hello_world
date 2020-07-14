@@ -13,7 +13,7 @@
 </head>
 <body>
 <a class="nav-link active" href="index.html" ><h5>返回</h5></a>
-<div class="col-2">
+<div class="col-2" align="center">
 <div class="input-group date" id="startTimePicker">
     <div class="input-group-addon text-primary"> 选择时间: </div>
     <input type="text" class="form-control" name="startTime" id="startTime" >
@@ -47,16 +47,20 @@
 <script type="text/javascript">
     $('#startTimePicker').datepicker({
         language: "zh-CN",
-        autoclose: true
-    });
+        autoclose: true }).on("hide",function (event) {
 
-    function queryALL() {
+          var a=event.date.getFullYear().toString() + "-"+ (event.date.getMonth()+1).toString()+ "-"+ event.date.getDate().toString();
+        console.log(a);
+            queryALL(a);
+    }) ;
+
+    function queryALL(m) {
 $.ajax({type: "POST",
         dataType: "json",
         url: '/historyquery',
         contentType: "application/json",
         data: JSON.stringify({
-            "command":"all"
+            "command":m
         }),
         success: function (data) {
             console.log(data);
