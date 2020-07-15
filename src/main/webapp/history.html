@@ -15,7 +15,7 @@
 <a class="nav-link active" href="index.html" ><h5>返回</h5></a>
 <div class="col-2" align="center">
 <div class="input-group date" id="startTimePicker">
-    <div class="input-group-addon text-primary"> 选择时间: </div>
+    <div class="input-group-addon text-primary"> 选择查询时间: </div>
     <input type="text" class="form-control" name="startTime" id="startTime" >
     <span class="input-group-addon">
 <span class="glyphicon glyphicon-calendar"></span>
@@ -27,7 +27,7 @@
     <h2 class="text-primary">历史记录</h2>
 
     <div class="btn-group">
-    <button class="btn btn-primary " onclick="queryALL()"  type="button">查询所有记录</button>
+    <button class="btn btn-primary " onclick="query('queryAll','all')"  type="button">查询所有记录</button>
     <button class="btn btn-primary " onclick="clearALL()"  type="button">清除所有记录</button>
     </div>
 
@@ -48,19 +48,27 @@
     $('#startTimePicker').datepicker({
         language: "zh-CN",
         autoclose: true }).on("hide",function (event) {
-
-          var a=event.date.getFullYear().toString() + "-"+ (event.date.getMonth()+1).toString()+ "-"+ event.date.getDate().toString();
+var m=event.date.getMonth()+1;
+var d=event.date.getDate();
+          var a=event.date.getFullYear().toString() + "-"+(m>9?m:"0"+m).toString()+ "-"+ (d>9?d:"0"+d).toString();
         console.log(a);
-            queryALL(a);
+            query('queryOneDay',a);
     }) ;
 
-    function queryALL(m) {
+    function query(cmd,pra) {
+        /* 使用变量创建JavaScript对象*/
+        var key= cmd;
+        var val =pra;
+        var act = {};
+        act[key] = val;
+
+        console.log(JSON.stringify(act));
 $.ajax({type: "POST",
         dataType: "json",
         url: '/historyquery',
         contentType: "application/json",
         data: JSON.stringify({
-            "command":m
+        act
         }),
         success: function (data) {
             console.log(data);

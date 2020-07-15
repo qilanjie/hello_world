@@ -19,10 +19,10 @@ public class Save extends HttpServlet {
     private static final long serialVersionUID = 1L;
     // JDBC 驱动名及数据库 URL
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://192.168.123.107:3306/sdzh?serverTimezone=UTC";
+    static final String DB_URL = "jdbc:mysql://localhost:3306/sdzh?serverTimezone=UTC";
 
     // 数据库的用户名与密码，需要根据自己的设置
-    static final String USER = "sdzh";
+    static final String USER = "root";
     static final String PASS = "qwh";
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

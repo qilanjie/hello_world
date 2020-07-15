@@ -20,11 +20,12 @@ public class History extends HttpServlet {
     private static final long serialVersionUID = 1L;
     // JDBC 驱动名及数据库 URL
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://192.168.123.107:3306/sdzh?serverTimezone=UTC";
+    static final String DB_URL = "jdbc:mysql://localhost:3306/sdzh?serverTimezone=UTC";
 
     // 数据库的用户名与密码，需要根据自己的设置
-    static final String USER = "sdzh";
+    static final String USER = "root";
     static final String PASS = "qwh";
+    private JSONObject act;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -36,11 +37,10 @@ public class History extends HttpServlet {
                 responseStrBuilder.append(inputStr);
 
             JSONObject jsonObject = JSONObject.parseObject(responseStrBuilder.toString());
-//            user= jsonObject.getString("user");
-//            password=jsonObject.getString("password");
-//            saveDate=jsonObject.getString("datetime");
-            System.out.println(responseStrBuilder.toString());
 
+            act=jsonObject.getJSONObject("act");
+            System.out.println(responseStrBuilder.toString());
+            System.out.println(act );
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,8 +60,15 @@ public class History extends HttpServlet {
 
             // 执行 SQL 查询
             stmt = conn.createStatement();
-            String sql;
-            sql = "SELECT * FROM userdemo";
+            String sql="SELECT * FROM userdemo";
+            if(act.containsKey("queryAll")) {
+                sql = "SELECT * FROM userdemo";
+            }
+            if(act.containsKey("queryOneDay")){
+                String date=act.getString("queryOneDay");
+                sql="SELECT * FROM userdemo WHERE DATE_FORMAT(savedate,'%Y-%m-%d')='"+date+"'";
+            }
+            
             ResultSet rs = stmt.executeQuery(sql);
 
             // 展开结果集数据库
